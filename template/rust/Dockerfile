@@ -7,8 +7,8 @@ ARG ARCH
 # Copy all the sources
 COPY main ./main
 
-RUN rustup target add aarch64-unknown-linux-musl
-RUN cd main && cargo build --target aarch64-unknown-linux-musl --release
+RUN rustup target add aarch64-unknown-linux-gnu
+RUN cd main && cargo build --target aarch64-unknown-linux-gnu --release
 
 FROM alpine:3.12 as runner
 
