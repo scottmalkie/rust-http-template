@@ -1,6 +1,6 @@
-FROM openfaas/of-watchdog:0.7.2 as watchdog
+FROM openfaas/of-watchdog:0.8.0 as watchdog
 
-FROM rust:1.37-alpine as builder
+FROM arm64v8/rust:1.45-slim-stretch as builder
 
 WORKDIR /home/rust
 
@@ -8,9 +8,10 @@ WORKDIR /home/rust
 COPY function ./function
 COPY main ./main
 
-RUN cd main && cargo build --target x86_64-unknown-linux-musl --release
+RUN rustup target add aarch64-unknown-linux-musl
+RUN cd main && cargo build --target aarch64-unknown-linux-musl --release
 
-FROM alpine:3.11 as runner
+FROM alpine:3.12 as runner
 
 # Install packages and add non-root user
 RUN apk --no-cache add curl ca-certificates \
