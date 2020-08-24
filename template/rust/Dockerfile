@@ -1,8 +1,8 @@
 FROM openfaas/of-watchdog:0.8.0 as watchdog
-
 FROM arm64v8/rust:1.45-slim-stretch as builder
-
 WORKDIR /home/rust
+
+ARG ARCH
 
 # Copy all the sources
 COPY function ./function
