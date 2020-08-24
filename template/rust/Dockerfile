@@ -5,7 +5,6 @@ WORKDIR /home/rust
 ARG ARCH
 
 # Copy all the sources
-COPY function ./function
 COPY main ./main
 
 RUN rustup target add aarch64-unknown-linux-musl
