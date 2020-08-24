@@ -7,6 +7,6 @@ async fn main() {
         .map(|name| format!("Hello, {}!", name));
 
     warp::serve(hello)
-        .run(([0, 0, 0, 0], 3030))
+        .run(([0, 0, 0, 0], 3000))
         .await;
 }
