@@ -8,8 +8,8 @@ WORKDIR /home/rust
 COPY main ./main
 
 # Compile binary
-RUN rustup target add aarch64-unknown-linux-gnu
-RUN cd main && cargo build --target aarch64-unknown-linux-gnu --release
+RUN rustup target add aarch64-unknown-linux-musl
+RUN cd main && cargo build --target aarch64-unknown-linux-musl--release
 
 # Build actual image
 FROM scratch
@@ -18,7 +18,7 @@ FROM scratch
 COPY --from=watchdog /fwatchdog /fwatchdog
 
 # Copy rust binary
-COPY --from=builder /home/rust/main/target/aarch64-unknown-linux-gnu/release/main /main
+COPY --from=builder /home/rust/main/target/aarch64-unknown-linux-musl/release/main /main
 
 # Set up watchdog for serialzing (stdio) mode
 ENV fprocess="/main"

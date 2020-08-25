@@ -8,7 +8,7 @@ This repository contains two Rust templates for OpenFaaS.
 $ faas template pull https://github.com/scottmalkie/rust-http-template
 $ faas new --list
 Languages available as templates:
-- rust
+- rust-warp
 - rust-hello
 ```
 
