@@ -12,27 +12,16 @@ RUN rustup target add aarch64-unknown-linux-gnu
 RUN cd main && cargo build --target aarch64-unknown-linux-gnu --release
 
 # Build actual image
-FROM alpine:3.12
-
-# Install packages and add non-root user
-RUN apk --no-cache add curl ca-certificates \
-    && addgroup -S app && adduser -S -g app app
-ENV USER=app
+FROM scratch
 
 # Copy of-watchdog binary
-COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
-RUN chmod +x /usr/bin/fwatchdog
-RUN which fwatchdog
+COPY --from=watchdog /fwatchdog /fwatchdog
 
 # Copy rust binary
-COPY --from=builder /home/rust/main/target/aarch64-unknown-linux-gnu/release/main /usr/bin/main
-RUN chmod +x /usr/bin/main
-RUN which main
+COPY --from=builder /home/rust/main/target/aarch64-unknown-linux-gnu/release/main /main
 
 # Set up watchdog for serialzing (stdio) mode
-ENV fprocess="/usr/bin/main"
+ENV fprocess="/main"
 ENV mode="serializing"
 
-HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
-
-CMD ["fwatchdog"]
+CMD ["/fwatchdog"]
