@@ -9,7 +9,7 @@ COPY main ./main
 
 # Compile binary
 RUN rustup target add aarch64-unknown-linux-musl
-RUN cd main && cargo build --target aarch64-unknown-linux-musl--release
+RUN cd main && cargo build --target aarch64-unknown-linux-musl --release
 
 # Build actual image
 FROM scratch
