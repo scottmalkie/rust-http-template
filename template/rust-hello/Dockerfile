@@ -2,8 +2,6 @@ FROM openfaas/of-watchdog:0.8.0 as watchdog
 FROM arm64v8/rust:1.45-slim-stretch as builder
 WORKDIR /home/rust
 
-ARG ARCH
-
 # Copy all the sources
 COPY main ./main
 
@@ -22,10 +20,12 @@ ENV USER=app
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-# Set up watchdog for HTTP mode
+COPY --from=builder /home/rust/main/target/aarch64-unknown-linux-gnu/release/main ./main
+RUN chmod +x ./main
+
+# Set up watchdog for serialzing (stdio) mode
 ENV fprocess="./main"
-ENV mode="http"
-ENV upstream_url="http://127.0.0.1:3000"
+ENV mode="serializing"
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
